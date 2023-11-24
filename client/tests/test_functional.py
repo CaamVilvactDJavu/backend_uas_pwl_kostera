@@ -1,12 +1,7 @@
-from client import models
-
-def test_my_view_success(testapp, dbsession):
-    model = models.MyModel(name='one', value=55)
-    dbsession.add(model)
-    dbsession.flush()
-
+def test_root(testapp):
     res = testapp.get('/', status=200)
-    assert res.body
+    assert b'Pyramid' in res.body
+
 
 def test_notfound(testapp):
     res = testapp.get('/badurl', status=404)

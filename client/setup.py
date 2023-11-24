@@ -14,12 +14,8 @@ requires = [
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'waitress',
-    'alembic',
-    'pyramid_retry',
-    'pyramid_tm',
-    'SQLAlchemy',
-    'transaction',
-    'zope.sqlalchemy',
+    'grpcio',
+    'grpcio-tools',
 ]
 
 tests_require = [
@@ -39,7 +35,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
-    author='',
+    author='c.a._.a.m',
     author_email='',
     url='',
     keywords='web pyramid pylons',
@@ -53,9 +49,6 @@ setup(
     entry_points={
         'paste.app_factory': [
             'main = client:main',
-        ],
-        'console_scripts': [
-            'initialize_client_db=client.scripts.initialize_db:main',
         ],
     },
 )
