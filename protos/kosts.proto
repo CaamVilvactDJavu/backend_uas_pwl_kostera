@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package kosts;
+
+message Kost {
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  string specification = 4;
+  string rule = 5;
+  string address = 6;
+  string facility = 7;
+  string image_url = 8;
+}
+
+message KostListResponse {
+  repeated Kost kosts = 1;
+  string message = 2;
+}
+
+message KostListRequest {
+}
+
+message KostRequest {
+  int32 id = 1;
+}
+
+message KostResponse {
+  Kost kost = 1;
+  string message = 2;
+}
+
+message KostCreateRequest {
+  string name = 1;
+  float price = 2;
+  string specification = 3;
+  string rule = 4;
+  string address = 5;
+  string facility = 6;
+  string image_url = 7;
+}
+
+message KostUpdateRequest {
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  string specification = 4;
+  string rule = 5;
+  string address = 6;
+  string facility = 7;
+  string image_url = 8;
+}
+
+message KostDeleteRequest {
+  int32 id = 1;
+}
+
+message KostDeleteResponse {
+  string message = 1;
+}
+
+service Kosts {
+  rpc GetKost(KostRequest) returns (KostResponse) {}
+  rpc GetKosts(KostListRequest) returns (KostListResponse) {}
+  rpc CreateKost(KostCreateRequest) returns (KostResponse) {}
+  rpc UpdateKost(KostUpdateRequest) returns (KostResponse) {}
+  rpc DeleteKost(KostDeleteRequest) returns (KostDeleteResponse) {}
+}
