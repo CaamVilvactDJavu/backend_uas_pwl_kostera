@@ -6,10 +6,11 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class Kost(_message.Message):
-    __slots__ = ["id", "name", "price", "specification", "rule", "address", "facility", "image_url"]
+    __slots__ = ["id", "name", "price", "gender", "specification", "rule", "address", "facility", "image_url"]
     ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PRICE_FIELD_NUMBER: _ClassVar[int]
+    GENDER_FIELD_NUMBER: _ClassVar[int]
     SPECIFICATION_FIELD_NUMBER: _ClassVar[int]
     RULE_FIELD_NUMBER: _ClassVar[int]
     ADDRESS_FIELD_NUMBER: _ClassVar[int]
@@ -18,12 +19,13 @@ class Kost(_message.Message):
     id: int
     name: str
     price: float
+    gender: str
     specification: str
     rule: str
     address: str
     facility: str
     image_url: str
-    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., price: _Optional[float] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., price: _Optional[float] = ..., gender: _Optional[str] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
 
 class KostListResponse(_message.Message):
     __slots__ = ["kosts", "message"]
@@ -52,9 +54,10 @@ class KostResponse(_message.Message):
     def __init__(self, kost: _Optional[_Union[Kost, _Mapping]] = ..., message: _Optional[str] = ...) -> None: ...
 
 class KostCreateRequest(_message.Message):
-    __slots__ = ["name", "price", "specification", "rule", "address", "facility", "image_url"]
+    __slots__ = ["name", "price", "gender", "specification", "rule", "address", "facility", "image_url"]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PRICE_FIELD_NUMBER: _ClassVar[int]
+    GENDER_FIELD_NUMBER: _ClassVar[int]
     SPECIFICATION_FIELD_NUMBER: _ClassVar[int]
     RULE_FIELD_NUMBER: _ClassVar[int]
     ADDRESS_FIELD_NUMBER: _ClassVar[int]
@@ -62,18 +65,20 @@ class KostCreateRequest(_message.Message):
     IMAGE_URL_FIELD_NUMBER: _ClassVar[int]
     name: str
     price: float
+    gender: str
     specification: str
     rule: str
     address: str
     facility: str
     image_url: str
-    def __init__(self, name: _Optional[str] = ..., price: _Optional[float] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
+    def __init__(self, name: _Optional[str] = ..., price: _Optional[float] = ..., gender: _Optional[str] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
 
 class KostUpdateRequest(_message.Message):
-    __slots__ = ["id", "name", "price", "specification", "rule", "address", "facility", "image_url"]
+    __slots__ = ["id", "name", "price", "gender", "specification", "rule", "address", "facility", "image_url"]
     ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PRICE_FIELD_NUMBER: _ClassVar[int]
+    GENDER_FIELD_NUMBER: _ClassVar[int]
     SPECIFICATION_FIELD_NUMBER: _ClassVar[int]
     RULE_FIELD_NUMBER: _ClassVar[int]
     ADDRESS_FIELD_NUMBER: _ClassVar[int]
@@ -82,12 +87,13 @@ class KostUpdateRequest(_message.Message):
     id: int
     name: str
     price: float
+    gender: str
     specification: str
     rule: str
     address: str
     facility: str
     image_url: str
-    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., price: _Optional[float] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., price: _Optional[float] = ..., gender: _Optional[str] = ..., specification: _Optional[str] = ..., rule: _Optional[str] = ..., address: _Optional[str] = ..., facility: _Optional[str] = ..., image_url: _Optional[str] = ...) -> None: ...
 
 class KostDeleteRequest(_message.Message):
     __slots__ = ["id"]

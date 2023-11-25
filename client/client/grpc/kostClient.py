@@ -13,11 +13,12 @@ class KostClient:
         self.channel = grpc.insecure_channel(f"{self.host}:{self.server_port}")
         self.stub = kosts_pb2_grpc.KostsStub(self.channel)
 
-    def create_kost(self, name, price, specification, rule, address, facility, image_url):
+    def create_kost(self, name, price, gender, specification, rule, address, facility, image_url):
         response = self.stub.CreateKost(
             kosts_pb2.KostCreateRequest(
                 name=name,
                 price=price,
+                gender=gender,
                 specification=specification,
                 rule=rule,
                 address=address,
@@ -29,6 +30,7 @@ class KostClient:
             id=response.kost.id,
             name=response.kost.name,
             price=response.kost.price,
+            gender=response.kost.gender,
             specification=response.kost.specification,
             rule=response.kost.rule,
             address=response.kost.address,
@@ -46,6 +48,7 @@ class KostClient:
             id=response.kost.id,
             name=response.kost.name,
             price=response.kost.price,
+            gender=response.kost.gender,
             specification=response.kost.specification,
             rule=response.kost.rule,
             address=response.kost.address,
@@ -64,6 +67,7 @@ class KostClient:
                 id=kost.id,
                 name=kost.name,
                 price=kost.price,
+                gender=kost.gender,
                 specification=kost.specification,
                 rule=kost.rule,
                 address=kost.address,
@@ -73,12 +77,13 @@ class KostClient:
             for kost in response.kosts
         ]
 
-    def update_kost(self, id, name, price, specification, rule, address, facility, image_url):
+    def update_kost(self, id, name, price, gender, specification, rule, address, facility, image_url):
         response = self.stub.UpdateKost(
             kosts_pb2.KostUpdateRequest(
                 id=id,
                 name=name,
                 price=price,
+                gender=gender,
                 specification=specification,
                 rule=rule,
                 address=address,
@@ -94,6 +99,7 @@ class KostClient:
             id=response.kost.id,
             name=response.kost.name,
             price=response.kost.price,
+            gender=response.kost.gender,
             specification=response.kost.specification,
             rule=response.kost.rule,
             address=response.kost.address,

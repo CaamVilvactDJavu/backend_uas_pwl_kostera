@@ -27,11 +27,12 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                         id=res[0],
                         name=res[1],
                         price=res[2],
-                        specification=res[3],
-                        rule=res[4],
-                        address=res[5],
-                        facility=res[6],
-                        image_url=res[7],
+                        gender=res[3],
+                        specification=res[4],
+                        rule=res[5],
+                        address=res[6],
+                        facility=res[7],
+                        image_url=res[8],
                     ),
                     message="Kost retrieved",
                 )
@@ -58,11 +59,12 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                             id=row[0],
                             name=row[1],
                             price=row[2],
-                            specification=row[3],
-                            rule=row[4],
-                            address=row[5],
-                            facility=row[6],
-                            image_url=row[7],
+                            gender=row[3],
+                            specification=row[4],
+                            rule=row[5],
+                            address=row[6],
+                            facility=row[7],
+                            image_url=row[8],
                         )
                     )
 
@@ -85,6 +87,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                     insert(Kost).values(
                         name=request.name,
                         price=request.price,
+                        gender=request.gender,
                         specification=request.specification,
                         rule=request.rule,
                         address=request.address,
@@ -101,6 +104,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                 kost=kosts_pb2.Kost(
                     name=request.name,
                     price=request.price,
+                    gender=request.gender,
                     specification=request.specification,
                     rule=request.rule,
                     address=request.address,
@@ -125,6 +129,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                     .values(
                         name=request.name,
                         price=request.price,
+                        gender=request.gender,
                         specification=request.specification,
                         rule=request.rule,
                         address=request.address,
@@ -142,6 +147,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                     id=request.id,
                     name=request.name,
                     price=request.price,
+                    gender=request.gender,
                     specification=request.specification,
                     rule=request.rule,
                     address=request.address,
