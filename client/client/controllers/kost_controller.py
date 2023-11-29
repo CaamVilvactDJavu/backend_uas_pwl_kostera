@@ -42,6 +42,7 @@ class KostView:
             result = kostClient.create_kost(
                 name=self.request.json_body.get("name"),
                 price=self.request.json_body.get("price") or 10000,
+                rating=self.request.json_body.get("rating") or 1,
                 gender=self.request.json_body.get("gender") or "No gender",
                 specification=self.request.json_body.get(
                     "specification") or "No specification",
@@ -80,6 +81,7 @@ class KostView:
                 name=self.request.json_body.get("name"),
                 gender=self.request.json_body.get("gender") or "No gender",
                 price=self.request.json_body.get("price") or 10000,
+                rating=self.request.json_body.get("rating") or 1,
                 specification=self.request.json_body.get(
                     "specification") or "No specification",
                 rule=self.request.json_body.get("rule") or "No rule",

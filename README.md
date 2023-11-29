@@ -1,6 +1,6 @@
 ### Server
 
-1. Ganti ke Directory Server 
+1. Ganti ke Directory Server
 
 ```
 cd server
@@ -28,7 +28,7 @@ python -m pip install --upgrade pip setuptools
 pip install -e .
 ```
 
-5. Generate gRPC 
+5. Generate gRPC
 
 ```
 python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/kosts.proto
@@ -37,7 +37,7 @@ python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python
 6. Buat Database
 
 ```
-Buat database (mysql) dengan nama backend_uas_pwl_kostera 
+Buat database (mysql) dengan nama backend_uas_pwl_kostera
 ```
 
 7. Migrate Database
@@ -82,7 +82,7 @@ python -m pip install --upgrade pip setuptools
 pip install -e .
 ```
 
-5. Generate gRPC 
+5. Generate gRPC
 
 ```
 python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/kosts.proto

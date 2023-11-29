@@ -22,6 +22,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
         sa.Column("name", sa.String(255), nullable=False),
         sa.Column("price", sa.Integer, nullable=False),
+        sa.Column("rating", sa.Integer, nullable=False),
         sa.Column("gender", sa.String(255), nullable=False),
         sa.Column("specification", sa.Text, nullable=True),
         sa.Column("rule", sa.Text, nullable=True),

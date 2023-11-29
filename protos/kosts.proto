@@ -6,12 +6,13 @@ message Kost {
   int32 id = 1;
   string name = 2;
   float price = 3;
-  string gender = 4;
-  string specification = 5;
-  string rule = 6;
-  string address = 7;
-  string facility = 8;
-  string image_url = 9;
+  float rating = 4;
+  string gender = 5;
+  string specification = 6;
+  string rule = 7;
+  string address = 8;
+  string facility = 9;
+  string image_url = 10;
 }
 
 message KostListResponse {
@@ -34,24 +35,26 @@ message KostResponse {
 message KostCreateRequest {
   string name = 1;
   float price = 2;
-  string gender = 3;
-  string specification = 4;
-  string rule = 5;
-  string address = 6;
-  string facility = 7;
-  string image_url = 8;
-}
-
-message KostUpdateRequest {
-  int32 id = 1;
-  string name = 2;
-  float price = 3;
+  float rating = 3;
   string gender = 4;
   string specification = 5;
   string rule = 6;
   string address = 7;
   string facility = 8;
   string image_url = 9;
+}
+
+message KostUpdateRequest {
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  float rating = 4;
+  string gender = 5;
+  string specification = 6;
+  string rule = 7;
+  string address = 8;
+  string facility = 9;
+  string image_url = 10;
 }
 
 message KostDeleteRequest {

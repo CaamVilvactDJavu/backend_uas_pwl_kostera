@@ -9,6 +9,7 @@ class Kost(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
+    rating: Mapped[int] = mapped_column(Integer, nullable=False)
     gender: Mapped[str] = mapped_column(String(255), nullable=False)
     specification: Mapped[str] = mapped_column(Text, nullable=True)
     rule: Mapped[str] = mapped_column(Text, nullable=True)
