@@ -1,12 +1,120 @@
-from concurrent import futures
-import logging
-import kosts_pb2_grpc
-import grpc
-import kosts_pb2
 from sqlalchemy import insert, select, update, delete, desc
-
+from concurrent import futures
 from database.config import engine
+import logging
+import grpc
+import jwt
+
+import kosts_pb2_grpc
+import kosts_pb2
 from models.kost import Kost
+
+import auth_pb2_grpc
+import auth_pb2
+from models.auth import Auth, Roles, auth_roles
+import secrets
+
+
+jwt_secret = secrets.token_urlsafe(32)
+jwt_algorithm = "HS256"
+
+print("Generated JWT Secret Key:", jwt_secret)
+
+
+class AuthServicer(auth_pb2_grpc.AuthService):
+    def generate_jwt_token(self, user_id, roles):
+        payload = {"sub": str(user_id), "roles": roles}
+        return jwt.encode(payload, jwt_secret, algorithm=jwt_algorithm)
+
+    def RegisterUser(self, request, context):
+        try:
+            with engine.connect() as conn:
+                conn.begin()
+
+                new_user = Auth(username=request.username, password=request.password)
+                conn.execute(
+                    insert(Auth).values(
+                        username=new_user.username, password=new_user.password
+                    )
+                )
+
+                roles = []  # Modify this to assign roles based on your logic
+                for role_name in roles:
+                    role = conn.execute(
+                        select(Roles).where(Roles.role_name == role_name)
+                    ).first()
+                    if role:
+                        new_user.roles.append(role)
+
+                conn.commit()
+
+            token = self.generate_jwt_token(new_user.id, roles)
+
+            return auth_pb2.RegisterResponse(
+                message="User registered successfully", token=token
+            )
+        except Exception as e:
+            print(f"Error registering user: {e}")
+            return auth_pb2.RegisterResponse(message="Error")
+
+    def LoginUser(self, request, context):
+        try:
+            with engine.connect() as conn:
+                conn.begin()
+
+                user = conn.execute(
+                    select(Auth).where(Auth.username == request.username)
+                ).first()
+
+                if user and user.password == request.password:
+                    # Fetch roles information from the database
+                    roles_query = conn.execute(
+                        select(Roles.role_name)
+                        .join(auth_roles)
+                        .where(auth_roles.c.auth_id == user.id)
+                    )
+
+                    roles = [role[0] for role in roles_query]
+
+                    # Use a new connection for subsequent operations
+                    with engine.connect() as new_conn:
+                        new_conn.begin()
+
+                        # Generate token using the new connection
+                        token = self.generate_jwt_token(user.id, roles)
+
+                        new_conn.commit()
+
+                    return auth_pb2.LoginResponse(
+                        token=token,
+                        message="Login successful",
+                    )
+                else:
+                    return auth_pb2.LoginResponse(message="Invalid credentials")
+
+        except Exception as e:
+            print(f"Error logging in user: {e}")
+            return auth_pb2.LoginResponse(message="Error")
+
+    def VerifyToken(self, request, context):
+        try:
+            decoded_token = jwt.decode(
+                request.token, jwt_secret, algorithms=[jwt_algorithm]
+            )
+
+            user_roles = decoded_token.get("roles", [])
+            if "admin" in user_roles:
+                return auth_pb2.VerifyTokenResponse(message="Token is valid")
+            else:
+                return auth_pb2.VerifyTokenResponse(message="Unauthorized user")
+
+        except jwt.ExpiredSignatureError:
+            return auth_pb2.VerifyTokenResponse(message="Token has expired")
+        except jwt.InvalidTokenError:
+            return auth_pb2.VerifyTokenResponse(message="Invalid token")
+        except Exception as e:
+            print(f"Error verifying token: {e}")
+            return auth_pb2.VerifyTokenResponse(message="Error")
 
 
 class KostsServicer(kosts_pb2_grpc.KostsServicer):
@@ -15,9 +123,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
             with engine.connect() as conn:
                 conn.begin()
 
-                res = conn.execute(
-                    select(Kost).where(Kost.id == request.id)
-                ).first()
+                res = conn.execute(select(Kost).where(Kost.id == request.id)).first()
 
                 conn.commit()
 
@@ -49,8 +155,7 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
             with engine.connect() as conn:
                 conn.begin()
 
-                res = conn.execute(
-                    select(Kost).order_by(desc(Kost.id))).all()
+                res = conn.execute(select(Kost).order_by(desc(Kost.id))).all()
 
                 kosts = []
 
@@ -185,8 +290,9 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    kosts_pb2_grpc.add_KostsServicer_to_server(
-        KostsServicer(), server)
+    auth_servicer = AuthServicer()
+    kosts_pb2_grpc.add_KostsServicer_to_server(KostsServicer(), server)
+    auth_pb2_grpc.add_AuthServiceServicer_to_server(auth_servicer, server)
     server.add_insecure_port("localhost:6000")
     server.start()
     print("Server started at localhost:6000")

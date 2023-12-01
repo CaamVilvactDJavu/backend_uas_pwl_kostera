@@ -44,14 +44,12 @@ class KostView:
                 price=self.request.json_body.get("price") or 10000,
                 rating=self.request.json_body.get("rating") or 1,
                 gender=self.request.json_body.get("gender") or "No gender",
-                specification=self.request.json_body.get(
-                    "specification") or "No specification",
+                specification=self.request.json_body.get("specification")
+                or "No specification",
                 rule=self.request.json_body.get("rule") or "No rule",
                 address=self.request.json_body.get("address") or "No address",
-                facility=self.request.json_body.get(
-                    "facility") or "No facility",
-                image_url=self.request.json_body.get(
-                    "image_url") or "No image_url",
+                facility=self.request.json_body.get("facility") or "No facility",
+                image_url=self.request.json_body.get("image_url") or "No image_url",
             )
             return result
         except Exception as e:
@@ -67,9 +65,7 @@ class KostView:
         try:
             kostClient = KostClient()
 
-            selected_kost = kostClient.get_kost(
-                id=self.request.json_body.get("id")
-            )
+            selected_kost = kostClient.get_kost(id=self.request.json_body.get("id"))
 
             if selected_kost is None:
                 return Response(
@@ -82,14 +78,12 @@ class KostView:
                 gender=self.request.json_body.get("gender") or "No gender",
                 price=self.request.json_body.get("price") or 10000,
                 rating=self.request.json_body.get("rating") or 1,
-                specification=self.request.json_body.get(
-                    "specification") or "No specification",
+                specification=self.request.json_body.get("specification")
+                or "No specification",
                 rule=self.request.json_body.get("rule") or "No rule",
                 address=self.request.json_body.get("address") or "No address",
-                facility=self.request.json_body.get(
-                    "facility") or "No facility",
-                image_url=self.request.json_body.get(
-                    "image_url") or "No image_url",
+                facility=self.request.json_body.get("facility") or "No facility",
+                image_url=self.request.json_body.get("image_url") or "No image_url",
             )
             return result
         except Exception as e:
@@ -105,17 +99,14 @@ class KostView:
         try:
             kostClient = KostClient()
 
-            selected_kost = kostClient.get_kost(
-                id=self.request.json_body.get("id")
-            )
+            selected_kost = kostClient.get_kost(id=self.request.json_body.get("id"))
 
             if selected_kost is None:
                 return Response(
                     json_body={"error": {"message": "Not found"}}, status=404
                 )
 
-            result = kostClient.delete_kost(
-                id=self.request.json_body.get("id"))
+            result = kostClient.delete_kost(id=self.request.json_body.get("id"))
             return result
         except Exception as e:
             return Response(json_body={"error": {"message": str(e)}}, status=500)

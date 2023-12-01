@@ -1,8 +1,7 @@
-import logging
-
 import grpc
-import client.grpc.kosts_pb2_grpc as kosts_pb2_grpc
+
 import client.grpc.kosts_pb2 as kosts_pb2
+import client.grpc.kosts_pb2_grpc as kosts_pb2_grpc
 
 
 class KostClient:
@@ -13,7 +12,18 @@ class KostClient:
         self.channel = grpc.insecure_channel(f"{self.host}:{self.server_port}")
         self.stub = kosts_pb2_grpc.KostsStub(self.channel)
 
-    def create_kost(self, name, price, rating, gender, specification, rule, address, facility, image_url):
+    def create_kost(
+        self,
+        name,
+        price,
+        rating,
+        gender,
+        specification,
+        rule,
+        address,
+        facility,
+        image_url,
+    ):
         response = self.stub.CreateKost(
             kosts_pb2.KostCreateRequest(
                 name=name,
@@ -81,7 +91,19 @@ class KostClient:
             for kost in response.kosts
         ]
 
-    def update_kost(self, id, name, price, rating, gender, specification, rule, address, facility, image_url):
+    def update_kost(
+        self,
+        id,
+        name,
+        price,
+        rating,
+        gender,
+        specification,
+        rule,
+        address,
+        facility,
+        image_url,
+    ):
         response = self.stub.UpdateKost(
             kosts_pb2.KostUpdateRequest(
                 id=id,
@@ -114,8 +136,7 @@ class KostClient:
         )
 
     def delete_kost(self, id):
-        response = self.stub.DeleteKost(
-            kosts_pb2.KostDeleteRequest(id=id))
+        response = self.stub.DeleteKost(kosts_pb2.KostDeleteRequest(id=id))
 
         if response.message is None:
             return None

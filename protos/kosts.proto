@@ -20,12 +20,9 @@ message KostListResponse {
   string message = 2;
 }
 
-message KostListRequest {
-}
+message KostListRequest {}
 
-message KostRequest {
-  int32 id = 1;
-}
+message KostRequest { int32 id = 1; }
 
 message KostResponse {
   Kost kost = 1;
@@ -57,13 +54,9 @@ message KostUpdateRequest {
   string image_url = 10;
 }
 
-message KostDeleteRequest {
-  int32 id = 1;
-}
+message KostDeleteRequest { int32 id = 1; }
 
-message KostDeleteResponse {
-  string message = 1;
-}
+message KostDeleteResponse { string message = 1; }
 
 service Kosts {
   rpc GetKost(KostRequest) returns (KostResponse) {}

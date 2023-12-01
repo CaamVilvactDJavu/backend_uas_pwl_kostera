@@ -1,4 +1,4 @@
-"""create kost table
+"""create kost table and auth table
 
 Revision ID: 121120011211
 Revises: 
@@ -32,7 +32,28 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime),
         sa.Column("updated_at", sa.DateTime),
     )
+    op.create_table(
+        "auth",
+        sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column("username", sa.String(255), nullable=False),
+        sa.Column("password", sa.String(255), nullable=False),
+    )
+
+    op.create_table(
+        "roles",
+        sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column("role_name", sa.String(255), nullable=False),
+    )
+
+    op.create_table(
+        "auth_roles",
+        sa.Column("auth_id", sa.Integer, sa.ForeignKey("auth.id"), primary_key=True),
+        sa.Column("role_id", sa.Integer, sa.ForeignKey("roles.id"), primary_key=True),
+    )
 
 
 def downgrade() -> None:
     op.drop_table("kost")
+    op.drop_table("auth")
+    op.drop_table("roles")
+    op.drop_table("auth_roles")
