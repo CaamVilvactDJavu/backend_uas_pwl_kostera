@@ -18,8 +18,6 @@ import secrets
 jwt_secret = secrets.token_urlsafe(32)
 jwt_algorithm = "HS256"
 
-print("Generated JWT Secret Key:", jwt_secret)
-
 
 class AuthServicer(auth_pb2_grpc.AuthService):
     def generate_jwt_token(self, user_id, roles):
