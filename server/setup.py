@@ -11,6 +11,7 @@ requires = [
     "mysql-connector-python",
     "pyramid_jwt",
     "PyJWT",
+    "bcrypt",
 ]
 
 tests_require = [

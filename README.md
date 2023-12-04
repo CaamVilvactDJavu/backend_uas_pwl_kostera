@@ -85,7 +85,7 @@ pip install -e .
 5. Generate gRPC
 
 ```
-python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/kosts.proto
+python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/kosts.proto ../protos/auth.proto
 ```
 
 6. Jalankan gRPC Client

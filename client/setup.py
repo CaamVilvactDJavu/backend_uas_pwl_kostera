@@ -17,6 +17,7 @@ requires = [
     "grpcio",
     "grpcio-tools",
     "pyramid_jwt",
+    "passlib",
 ]
 
 tests_require = [

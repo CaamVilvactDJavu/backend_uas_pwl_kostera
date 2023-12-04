@@ -1,9 +1,11 @@
 from sqlalchemy import insert, select, update, delete, desc
+from datetime import datetime
 from concurrent import futures
 from database.config import engine
 import logging
 import grpc
 import jwt
+import bcrypt
 
 import kosts_pb2_grpc
 import kosts_pb2
@@ -24,19 +26,41 @@ class AuthServicer(auth_pb2_grpc.AuthService):
         payload = {"sub": str(user_id), "roles": roles}
         return jwt.encode(payload, jwt_secret, algorithm=jwt_algorithm)
 
+    def hash_password(self, password):
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)
+        return hashed_password
+
     def RegisterUser(self, request, context):
         try:
+            if not (5 <= len(request.username) <= 16):
+                return auth_pb2.RegisterResponse(
+                    message="Username must be between 5 and 16 characters"
+                )
+
             with engine.connect() as conn:
                 conn.begin()
 
-                new_user = Auth(username=request.username, password=request.password)
+                existing_user = conn.execute(
+                    select(Auth).where(Auth.username == request.username)
+                ).first()
+
+                if existing_user:
+                    return auth_pb2.RegisterResponse(
+                        message="Username already exists. Please choose a different one."
+                    )
+
+                new_user = Auth(
+                    username=request.username,
+                    password=self.hash_password(request.password),
+                )
                 conn.execute(
                     insert(Auth).values(
                         username=new_user.username, password=new_user.password
                     )
                 )
 
-                roles = []  # Modify this to assign roles based on your logic
+                roles = ["user"]
                 for role_name in roles:
                     role = conn.execute(
                         select(Roles).where(Roles.role_name == role_name)
@@ -64,8 +88,9 @@ class AuthServicer(auth_pb2_grpc.AuthService):
                     select(Auth).where(Auth.username == request.username)
                 ).first()
 
-                if user and user.password == request.password:
-                    # Fetch roles information from the database
+                if user and bcrypt.checkpw(
+                    request.password.encode("utf-8"), user.password.encode("utf-8")
+                ):
                     roles_query = conn.execute(
                         select(Roles.role_name)
                         .join(auth_roles)
@@ -74,11 +99,9 @@ class AuthServicer(auth_pb2_grpc.AuthService):
 
                     roles = [role[0] for role in roles_query]
 
-                    # Use a new connection for subsequent operations
                     with engine.connect() as new_conn:
                         new_conn.begin()
 
-                        # Generate token using the new connection
                         token = self.generate_jwt_token(user.id, roles)
 
                         new_conn.commit()
@@ -199,6 +222,8 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                         address=request.address,
                         facility=request.facility,
                         image_url=request.image_url,
+                        created_at=datetime.utcnow(),
+                        updated_at=datetime.utcnow(),
                     )
                 )
 
@@ -235,14 +260,15 @@ class KostsServicer(kosts_pb2_grpc.KostsServicer):
                     .where(Kost.id == request.id)
                     .values(
                         name=request.name,
-                        price=request.price,
                         rating=request.rating,
+                        price=request.price,
                         gender=request.gender,
                         specification=request.specification,
                         rule=request.rule,
                         address=request.address,
                         facility=request.facility,
                         image_url=request.image_url,
+                        updated_at=datetime.utcnow(),
                     )
                 )
 
