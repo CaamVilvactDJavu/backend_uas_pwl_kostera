@@ -6,12 +6,14 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Optional as _Op
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class UserRequest(_message.Message):
-    __slots__ = ["username", "password"]
+    __slots__ = ["username", "password", "role"]
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    ROLE_FIELD_NUMBER: _ClassVar[int]
     username: str
     password: str
-    def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+    role: str
+    def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ..., role: _Optional[str] = ...) -> None: ...
 
 class RegisterResponse(_message.Message):
     __slots__ = ["message", "token"]
@@ -22,12 +24,26 @@ class RegisterResponse(_message.Message):
     def __init__(self, message: _Optional[str] = ..., token: _Optional[str] = ...) -> None: ...
 
 class LoginResponse(_message.Message):
-    __slots__ = ["message", "token"]
+    __slots__ = ["message", "token", "role"]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     TOKEN_FIELD_NUMBER: _ClassVar[int]
+    ROLE_FIELD_NUMBER: _ClassVar[int]
     message: str
     token: str
-    def __init__(self, message: _Optional[str] = ..., token: _Optional[str] = ...) -> None: ...
+    role: str
+    def __init__(self, message: _Optional[str] = ..., token: _Optional[str] = ..., role: _Optional[str] = ...) -> None: ...
+
+class AdminLoginResponse(_message.Message):
+    __slots__ = ["message", "token", "role", "roles"]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
+    ROLE_FIELD_NUMBER: _ClassVar[int]
+    ROLES_FIELD_NUMBER: _ClassVar[int]
+    message: str
+    token: str
+    role: _containers.RepeatedScalarFieldContainer[str]
+    roles: str
+    def __init__(self, message: _Optional[str] = ..., token: _Optional[str] = ..., role: _Optional[_Iterable[str]] = ..., roles: _Optional[str] = ...) -> None: ...
 
 class TokenRequest(_message.Message):
     __slots__ = ["token"]

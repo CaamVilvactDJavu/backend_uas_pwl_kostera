@@ -60,7 +60,13 @@ class AuthServicer(auth_pb2_grpc.AuthService):
                     )
                 )
 
-                roles = ["user"]
+                role_user = conn.execute(
+                    select(Roles).where(Roles.role_name == "user")
+                ).first()
+                if role_user:
+                    new_user.roles.append(role_user)
+
+                roles = [request.role] if request.role else ["user"]
                 for role_name in roles:
                     role = conn.execute(
                         select(Roles).where(Roles.role_name == role_name)
@@ -68,16 +74,68 @@ class AuthServicer(auth_pb2_grpc.AuthService):
                     if role:
                         new_user.roles.append(role)
 
+                # Fetch the user ID after insertion
+                new_user = conn.execute(
+                    select(Auth).where(Auth.username == request.username)
+                ).first()
+
+                # Add the user to the "user" role in auth_roles table
+                conn.execute(
+                    insert(auth_roles).values(
+                        auth_id=new_user.id,
+                        role_id=role_user.id,
+                    )
+                )
+
                 conn.commit()
 
-            token = self.generate_jwt_token(new_user.id, roles)
+                token = self.generate_jwt_token(new_user.id, roles)
 
-            return auth_pb2.RegisterResponse(
-                message="User registered successfully", token=token
-            )
+                return auth_pb2.RegisterResponse(
+                    message="User registered successfully", token=token
+                )
+
         except Exception as e:
             print(f"Error registering user: {e}")
             return auth_pb2.RegisterResponse(message="Error")
+
+    def AdminLogin(self, request, context):
+        try:
+            with engine.connect() as conn:
+                conn.begin()
+
+                user = conn.execute(
+                    select(Auth).where(Auth.username == request.username)
+                ).first()
+
+                if (
+                    user
+                    and user.password
+                    and bcrypt.checkpw(
+                        request.password.encode("utf-8"), user.password.encode("utf-8")
+                    )
+                ):
+                    roles_query = conn.execute(
+                        select(Roles.role_name)
+                        .join(auth_roles)
+                        .where(auth_roles.c.auth_id == user.id)
+                    )
+
+                    roles = [role[0] for role in roles_query]
+
+                    token = self.generate_jwt_token(user.id, roles)
+
+                    return auth_pb2.AdminLoginResponse(
+                        token=token,
+                        message="Admin login successful",
+                        roles=",".join(roles),
+                    )
+                else:
+                    return auth_pb2.AdminLoginResponse(message="Invalid credentials")
+
+        except Exception as e:
+            print(f"Error logging in admin: {e}")
+            return auth_pb2.AdminLoginResponse(message="Error")
 
     def LoginUser(self, request, context):
         try:
@@ -98,21 +156,16 @@ class AuthServicer(auth_pb2_grpc.AuthService):
                     )
 
                     roles = [role[0] for role in roles_query]
-
-                    with engine.connect() as new_conn:
-                        new_conn.begin()
-
-                        token = self.generate_jwt_token(user.id, roles)
-
-                        new_conn.commit()
+                    token = self.generate_jwt_token(user.id, roles)
 
                     return auth_pb2.LoginResponse(
                         token=token,
                         message="Login successful",
+                        role=roles[0] if roles else "user",
                     )
+
                 else:
                     return auth_pb2.LoginResponse(message="Invalid credentials")
-
         except Exception as e:
             print(f"Error logging in user: {e}")
             return auth_pb2.LoginResponse(message="Error")

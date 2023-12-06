@@ -24,6 +24,11 @@ class AuthServiceStub(object):
             request_serializer=auth__pb2.UserRequest.SerializeToString,
             response_deserializer=auth__pb2.LoginResponse.FromString,
         )
+        self.AdminLogin = channel.unary_unary(
+            "/auth.AuthService/AdminLogin",
+            request_serializer=auth__pb2.UserRequest.SerializeToString,
+            response_deserializer=auth__pb2.AdminLoginResponse.FromString,
+        )
         self.VerifyToken = channel.unary_unary(
             "/auth.AuthService/VerifyToken",
             request_serializer=auth__pb2.TokenRequest.SerializeToString,
@@ -41,6 +46,12 @@ class AuthServiceServicer(object):
         raise NotImplementedError("Method not implemented!")
 
     def LoginUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def AdminLogin(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -64,6 +75,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
             servicer.LoginUser,
             request_deserializer=auth__pb2.UserRequest.FromString,
             response_serializer=auth__pb2.LoginResponse.SerializeToString,
+        ),
+        "AdminLogin": grpc.unary_unary_rpc_method_handler(
+            servicer.AdminLogin,
+            request_deserializer=auth__pb2.UserRequest.FromString,
+            response_serializer=auth__pb2.AdminLoginResponse.SerializeToString,
         ),
         "VerifyToken": grpc.unary_unary_rpc_method_handler(
             servicer.VerifyToken,
@@ -129,6 +145,35 @@ class AuthService(object):
             "/auth.AuthService/LoginUser",
             auth__pb2.UserRequest.SerializeToString,
             auth__pb2.LoginResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def AdminLogin(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/auth.AuthService/AdminLogin",
+            auth__pb2.UserRequest.SerializeToString,
+            auth__pb2.AdminLoginResponse.FromString,
             options,
             channel_credentials,
             insecure,

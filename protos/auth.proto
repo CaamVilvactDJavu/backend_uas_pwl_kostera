@@ -5,12 +5,14 @@ package auth;
 service AuthService {
   rpc RegisterUser(UserRequest) returns (RegisterResponse);
   rpc LoginUser(UserRequest) returns (LoginResponse);
+  rpc AdminLogin(UserRequest) returns (AdminLoginResponse);
   rpc VerifyToken(TokenRequest) returns (VerifyTokenResponse);
 }
 
 message UserRequest {
   string username = 1;
   string password = 2;
+  string role = 3;
 }
 
 message RegisterResponse {
@@ -21,6 +23,14 @@ message RegisterResponse {
 message LoginResponse {
   string message = 1;
   string token = 2;
+  string role = 3;
+}
+
+message AdminLoginResponse {
+  string message = 1;
+  string token = 2;
+  repeated string role = 3;
+  string roles = 4;
 }
 
 message TokenRequest { string token = 1; }

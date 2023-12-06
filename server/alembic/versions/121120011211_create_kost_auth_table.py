@@ -52,6 +52,21 @@ def upgrade() -> None:
         sa.Column("role_id", sa.Integer, sa.ForeignKey("roles.id"), primary_key=True),
     )
 
+    roles_table = sa.Table(
+        "roles",
+        sa.MetaData(),
+        sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column("role_name", sa.String(255), nullable=False),
+    )
+
+    op.bulk_insert(
+        roles_table,
+        [
+            {"role_name": "user"},
+            {"role_name": "admin"},
+        ],
+    )
+
 
 def downgrade() -> None:
     op.drop_table("kost")

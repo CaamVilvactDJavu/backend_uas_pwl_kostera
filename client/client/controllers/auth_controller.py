@@ -12,20 +12,37 @@ class AuthView:
     @view_config(route_name="register", request_method="POST")
     def register_user(self):
         try:
+            role = self.request.json_body.get("role", "user")
             result = self.auth_client.register_user(
+                username=self.request.json_body.get("username"),
+                password=self.request.json_body.get("password"),
+                role=role,
+            )
+            return result
+
+        except Exception as e:
+            return Response(json_body={"error": {"message": str(e)}}, status=500)
+
+    @view_config(route_name="admin_login", request_method="POST")
+    def admin_login(self):
+        try:
+            result = self.auth_client.admin_login(
                 username=self.request.json_body.get("username"),
                 password=self.request.json_body.get("password"),
             )
             return result
+
         except Exception as e:
             return Response(json_body={"error": {"message": str(e)}}, status=500)
 
     @view_config(route_name="login", request_method="POST")
     def login_user(self):
         try:
+            role = "user"
             result = self.auth_client.login_user(
                 username=self.request.json_body.get("username"),
                 password=self.request.json_body.get("password"),
+                role=role,
             )
             return result
         except Exception as e:

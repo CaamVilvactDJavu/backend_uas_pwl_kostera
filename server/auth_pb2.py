@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\x12\x04\x61uth\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x10RegisterResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\"/\n\rLoginResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\"\x1d\n\x0cTokenRequest\x12\r\n\x05token\x18\x01 \x01(\t\"D\n\x13VerifyTokenResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05valid\x18\x02 \x01(\x08\x12\r\n\x05roles\x18\x03 \x03(\t2\xbb\x01\n\x0b\x41uthService\x12\x39\n\x0cRegisterUser\x12\x11.auth.UserRequest\x1a\x16.auth.RegisterResponse\x12\x33\n\tLoginUser\x12\x11.auth.UserRequest\x1a\x13.auth.LoginResponse\x12<\n\x0bVerifyToken\x12\x12.auth.TokenRequest\x1a\x19.auth.VerifyTokenResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\x12\x04\x61uth\"?\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x01(\t\"2\n\x10RegisterResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\"=\n\rLoginResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x01(\t\"Q\n\x12\x41\x64minLoginResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x03(\t\x12\r\n\x05roles\x18\x04 \x01(\t\"\x1d\n\x0cTokenRequest\x12\r\n\x05token\x18\x01 \x01(\t\"D\n\x13VerifyTokenResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05valid\x18\x02 \x01(\x08\x12\r\n\x05roles\x18\x03 \x03(\t2\xf6\x01\n\x0b\x41uthService\x12\x39\n\x0cRegisterUser\x12\x11.auth.UserRequest\x1a\x16.auth.RegisterResponse\x12\x33\n\tLoginUser\x12\x11.auth.UserRequest\x1a\x13.auth.LoginResponse\x12\x39\n\nAdminLogin\x12\x11.auth.UserRequest\x1a\x18.auth.AdminLoginResponse\x12<\n\x0bVerifyToken\x12\x12.auth.TokenRequest\x1a\x19.auth.VerifyTokenResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -21,15 +21,17 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _globals['_USERREQUEST']._serialized_start=20
-  _globals['_USERREQUEST']._serialized_end=69
-  _globals['_REGISTERRESPONSE']._serialized_start=71
-  _globals['_REGISTERRESPONSE']._serialized_end=121
-  _globals['_LOGINRESPONSE']._serialized_start=123
-  _globals['_LOGINRESPONSE']._serialized_end=170
-  _globals['_TOKENREQUEST']._serialized_start=172
-  _globals['_TOKENREQUEST']._serialized_end=201
-  _globals['_VERIFYTOKENRESPONSE']._serialized_start=203
-  _globals['_VERIFYTOKENRESPONSE']._serialized_end=271
-  _globals['_AUTHSERVICE']._serialized_start=274
-  _globals['_AUTHSERVICE']._serialized_end=461
+  _globals['_USERREQUEST']._serialized_end=83
+  _globals['_REGISTERRESPONSE']._serialized_start=85
+  _globals['_REGISTERRESPONSE']._serialized_end=135
+  _globals['_LOGINRESPONSE']._serialized_start=137
+  _globals['_LOGINRESPONSE']._serialized_end=198
+  _globals['_ADMINLOGINRESPONSE']._serialized_start=200
+  _globals['_ADMINLOGINRESPONSE']._serialized_end=281
+  _globals['_TOKENREQUEST']._serialized_start=283
+  _globals['_TOKENREQUEST']._serialized_end=312
+  _globals['_VERIFYTOKENRESPONSE']._serialized_start=314
+  _globals['_VERIFYTOKENRESPONSE']._serialized_end=382
+  _globals['_AUTHSERVICE']._serialized_start=385
+  _globals['_AUTHSERVICE']._serialized_end=631
 # @@protoc_insertion_point(module_scope)
