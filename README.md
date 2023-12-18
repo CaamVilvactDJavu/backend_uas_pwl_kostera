@@ -12,10 +12,10 @@
 ## Daftar isi
 
 1. [Server](#server)
-   1. [Cara Menjalankan Server Side](#cara-menjalankan-server-side)
+   1. [How to run Server Side](#how-to-run-server-side)
    2. [Library Server Side](#library-server-side)
 2. [Client](#client)
-   1. [Cara Menjalankan Client Side](#cara-menjalankan-client-side)
+   1. [How to run Client Side](#how-to-run-client-side)
    2. [Library Client Side](#library-client-side)
 3. [API Routes](#api-routes)
    1. [Endpoints Kost](#endpoints-kost)
@@ -23,7 +23,7 @@
 
 ### Server
 
-#### Cara Menjalankan Server Side
+#### How to run Server Side
 
 1. Ganti ke Directory Server
 
@@ -93,7 +93,7 @@ python -m server
 
 ### Client
 
-#### Cara Menjalankan Client Side
+#### How to run Client Side
 
 1. Ganti ke Directory Client
 
